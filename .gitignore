@@ -1,0 +1,9 @@
+node_modules/
+.env
+npm-debug.log
+dist/
+public/
+*.sqlite
+data/chat_database.sqlite
+*.log
+server.log

@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración | Pep Bernat</title>
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Dashboard Specific Overrides needing access to vars */
+        :root {
+            --bg-glass: rgba(255, 255, 255, 0.8);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .dashboard-nav {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .nav-btn:hover,
+        .nav-btn.active {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary-dark);
+            border-color: rgba(99, 102, 241, 0.2);
+        }
+
+        /* Table Styles */
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        th {
+            background: rgba(99, 102, 241, 0.05);
+            text-align: left;
+            padding: 1rem;
+            font-weight: 600;
+            color: var(--text);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--muted);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: rgba(99, 102, 241, 0.02);
+            cursor: pointer;
+            color: var(--text);
+        }
+
+        /* Auth Form */
+        .auth-container {
+            max-width: 400px;
+            margin: 10vh auto;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: #fff;
+            margin-bottom: 1rem;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        button.primary-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        button.primary-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        /* Chat Preview */
+        .chat-preview {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            border-radius: 99px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .role-admin {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .role-readonly {
+            background: #ffedd5;
+            color: #c2410c;
+        }
+
+        .delete-icon {
+            color: #ef4444;
+            background: #fee2e2;
+            padding: 6px;
+            border-radius: 6px;
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- AUTH VIEW -->
+    <div id="auth-view" class="container hidden" style="justify-content: center; min-height: 80vh;">
+        <div class="assistant-card auth-container">
+            <h2 id="auth-title">Acceso Privado</h2>
+            <p id="setup-msg" class="subtitle hidden" style="margin-bottom: 1.5rem;">Configuración inicial: Crea el
+                usuario Administrador.</p>
+
+            <form id="auth-form-el">
+                <input type="text" id="username" placeholder="Usuario" required>
+                <input type="password" id="password" placeholder="Contraseña" required>
+                <button type="submit" id="auth-btn" class="primary-btn">Entrar</button>
+            </form>
+            <p id="auth-error" style="color: #ef4444; margin-top: 1rem; font-size: 0.9rem;"></p>
+        </div>
+    </div>
+
+    <!-- DASHBOARD VIEW -->
+    <div id="dashboard-view" class="container hidden">
+
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div>
+                    <p class="eyebrow">Sistema de Gestión</p>
+                    <h1>Dashboard</h1>
+                    <p class="subtitle">Usuario: <span id="user-display"
+                            style="font-weight: 600; color: var(--primary);"></span></p>
+                </div>
+
+                <div class="dashboard-nav">
+                    <button onclick="showSection('sessions')" id="nav-sessions" class="nav-btn active">Sesiones</button>
+                    <button onclick="showSection('users')" id="nav-users" class="nav-btn hidden">Usuarios</button>
+                    <button onclick="logout()" class="nav-btn"
+                        style="color: #ef4444; border-color: rgba(239,68,68,0.3);">Salir</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="chat-container" style="grid-template-columns: 1fr;"> <!-- Full width main -->
+
+            <!-- SESSIONS SECTION -->
+            <section id="section-sessions" class="info-card">
+                <div class="info-card-header" style="margin-bottom: 1.5rem;">
+                    <h3>Conversaciones Recientes</h3>
+                    <p class="subtitle">Historial completo de interacciones con el asistente.</p>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 250px;">ID Sesión</th>
+                                <th style="width: 200px;">Fecha</th>
+                                <th>Vista Previa</th>
+                                <th style="width: 80px;">Msjs</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sessions-table">
+                            <!-- Filled by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- USERS SECTION (ADMIN) -->
+            <section id="section-users" class="info-card hidden">
+                <div class="info-card-header"
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <div>
+                        <h3>Gestión de Usuarios</h3>
+                        <p class="subtitle">Control de acceso al panel.</p>
+                    </div>
+                </div>
+
+                <div
+                    style="background: rgba(99, 102, 241, 0.03); padding: 1.5rem; border-radius: var(--radius-md); margin-bottom: 2rem; border: 1px solid var(--border);">
+                    <h4 style="margin-bottom: 1rem; font-size: 0.95rem;">Añadir Usuario</h4>
+                    <form id="create-user-form"
+                        style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 1rem;">
+                        <input type="text" id="new-user" placeholder="Usuario" required style="margin: 0;">
+                        <input type="password" id="new-pass" placeholder="Contraseña" required style="margin: 0;">
+                        <select id="new-role" style="margin: 0;">
+                            <option value="readonly">Lectura</option>
+                            <option value="admin">Administrador</option>
+                        </select>
+                        <button type="submit" class="primary-btn" style="width: auto; padding: 0 1.5rem;">Crear</button>
+                    </form>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Usuario</th>
+                                <th>Rol</th>
+                                <th style="text-align: right;">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table">
+                            <!-- Filled by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- SESSION DETAIL MODAL (In-page) -->
+            <section id="session-detail" class="info-card hidden">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border);">
+                    <div>
+                        <button onclick="closeDetail()" class="ghost-button">
+                            <i class="fas fa-arrow-left"></i> Volver
+                        </button>
+                    </div>
+                    <div style="text-align: right;">
+                        <span id="session-id-detail"
+                            style="font-family: 'JetBrains Mono'; font-size: 0.85rem; background: var(--border); padding: 4px 8px; border-radius: 4px;"></span>
+                    </div>
+                </div>
+
+                <div id="chat-container" class="chat-preview"></div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        let currentUser = null;
+        let isSetupMode = false;
+
+        // --- AUTH LOGIC ---
+        async function checkStatus() {
+            try {
+                const res = await fetch('/api/auth/status');
+                const data = await res.json();
+
+                if (data.isLoggedIn) {
+                    currentUser = data.user;
+                    showDashboard();
+                } else {
+                    showAuth(data.setupNeeded);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function showAuth(setupNeeded) {
+            document.getElementById('dashboard-view').classList.add('hidden');
+            document.getElementById('auth-view').classList.remove('hidden');
+            isSetupMode = setupNeeded;
+
+            if (setupNeeded) {
+                document.getElementById('auth-title').innerText = 'Registro Inicial (Admin)';
+                document.getElementById('auth-btn').innerText = 'Registrar y Entrar';
+                document.getElementById('setup-msg').classList.remove('hidden');
+            } else {
+                document.getElementById('auth-title').innerText = 'Iniciar Sesión';
+                document.getElementById('auth-btn').innerText = 'Entrar';
+                document.getElementById('setup-msg').classList.add('hidden');
+            }
+        }
+
+        document.getElementById('auth-form-el').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const u = document.getElementById('username').value;
+            const p = document.getElementById('password').value;
+            const endpoint = isSetupMode ? '/api/auth/register' : '/api/auth/login';
+
+            try {
+                const res = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: u, password: p })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    currentUser = data.user;
+                    showDashboard();
+                } else {
+                    document.getElementById('auth-error').innerText = data.error || 'Error desconocido';
+                }
+            } catch (err) {
+                document.getElementById('auth-error').innerText = 'Error de conexión';
+            }
+        });
+
+        async function logout() {
+            await fetch('/api/auth/logout', { method: 'POST' });
+            window.location.reload();
+        }
+
+        // --- DASHBOARD LOGIC ---
+        function showDashboard() {
+            document.getElementById('auth-view').classList.add('hidden');
+            document.getElementById('dashboard-view').classList.remove('hidden');
+            document.getElementById('user-display').innerText = `(${currentUser.username} - ${currentUser.role})`;
+
+            if (currentUser.role === 'admin') {
+                document.getElementById('nav-users').classList.remove('hidden');
+            }
+
+            loadSessions();
+        }
+
+        function showSection(section) {
+            document.getElementById('section-sessions').classList.add('hidden');
+            document.getElementById('section-users').classList.add('hidden');
+            document.getElementById('session-detail').classList.add('hidden');
+
+            document.getElementById('nav-sessions').classList.remove('active');
+            document.getElementById('nav-users').classList.remove('active');
+
+            document.getElementById(`section-${section}`).classList.remove('hidden');
+            document.getElementById(`nav-${section}`).classList.add('active');
+
+            if (section === 'users') loadUsers();
+        }
+
+        // --- SESSIONS ---
+        async function loadSessions() {
+            const res = await fetch('/api/dashboard/sessions');
+            const data = await res.json();
+            const tbody = document.getElementById('sessions-table');
+            tbody.innerHTML = '';
+
+            data.sessions.forEach(s => {
+                const tr = document.createElement('tr');
+                tr.onclick = () => openSession(s.sessionId);
+                tr.innerHTML = `
+                <td><code>${s.sessionId}</code></td>
+                <td>${new Date(s.updatedAt).toLocaleString()}</td>
+                <td><div style="font-size: 0.9em; opacity: 0.8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 300px;">${s.preview}</div></td>
+                <td>${s.messageCount}</td>
+            `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function openSession(id) {
+            const res = await fetch(`/api/dashboard/sessions/${id}`);
+            const data = await res.json();
+            const s = data.session;
+
+            document.getElementById('section-sessions').classList.add('hidden');
+            document.getElementById('session-detail').classList.remove('hidden');
+            document.getElementById('session-id-detail').innerText = `Sesión: ${id}`;
+
+            const container = document.getElementById('chat-container');
+            container.innerHTML = s.messages.map(m => `
+            <div class="message ${m.role}">
+                <div style="font-size: 0.8em; margin-bottom: 5px; opacity: 0.7; display: flex; justify-content: space-between;">
+                    <span>${m.role.toUpperCase()}</span>
+                    <span>${new Date(m.timestamp).toLocaleTimeString()}</span>
+                </div>
+                <div class="message-bubble">
+                    ${m.content}
+                </div>
+            </div>
+        `).join('');
+        }
+
+        function closeDetail() {
+            document.getElementById('session-detail').classList.add('hidden');
+            document.getElementById('section-sessions').classList.remove('hidden');
+        }
+
+        // --- USERS ---
+        async function loadUsers() {
+            if (currentUser.role !== 'admin') return;
+            const res = await fetch('/api/users');
+            const data = await res.json();
+            const tbody = document.getElementById('users-table');
+            tbody.innerHTML = '';
+
+            data.users.forEach(u => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                <td>${u.username}</td>
+                <td><span class="role-badge role-${u.role}">${u.role}</span></td>
+                <td style="text-align: right;">
+                    ${u.username !== currentUser.username ? `<button class="delete-icon" onclick="deleteUser('${u.username}')"><i class="fas fa-trash"></i></button>` : ''}
+                </td>
+            `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        document.getElementById('create-user-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const u = document.getElementById('new-user').value;
+            const p = document.getElementById('new-pass').value;
+            const r = document.getElementById('new-role').value;
+
+            const res = await fetch('/api/users', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: u, password: p, role: r })
+            });
+
+            if (res.ok) {
+                document.getElementById('new-user').value = '';
+                document.getElementById('new-pass').value = '';
+                loadUsers();
+            } else {
+                alert('Error al crear usuario (quizás ya existe)');
+            }
+        });
+
+        async function deleteUser(username) {
+            if (!confirm(`¿Eliminar usuario ${username}?`)) return;
+            await fetch(`/api/users/${username}`, { method: 'DELETE' });
+            loadUsers();
+        }
+
+        // Init
+        checkStatus();
+
+    </script>
+
+</body>
+
+</html>
