@@ -23,7 +23,7 @@ The system follows a classic client-server architecture with an integrated AI mo
 
 ```mermaid
 graph TD
-    User[User] -->|HTTPS| Frontend[Client (HTML/JS)]
+    User[User] -->|HTTPS| Frontend[Client HTML/JS]
     Frontend -->|REST API| Backend[Node.js Express Server]
     
     subgraph "Backend System"
