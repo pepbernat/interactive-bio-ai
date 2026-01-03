@@ -36,7 +36,7 @@ ENV NODE_ENV=production
 COPY --from=builder /usr/src/app/package*.json ./
 COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/server.js ./
-COPY --from=builder /usr/src/app/.embeddings_cache.json ./
+
 COPY --from=builder /usr/src/app/src ./src
 COPY --from=builder /usr/src/app/config.json ./
 COPY --from=builder /usr/src/app/knowledge.md ./
