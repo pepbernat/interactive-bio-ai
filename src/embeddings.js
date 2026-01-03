@@ -14,7 +14,7 @@ if (!OPENAI_API_KEY) {
   throw new Error('OPENAI_API_KEY no encontrada. Configure la variable de entorno para usar embeddings de OpenAI.');
 }
 
-const EMB_CACHE_FILE = path.join(__dirname, '../.embeddings_cache.json');
+const EMB_CACHE_FILE = path.join(__dirname, '.embeddings_cache.json');
 let knowledgeChunks = [];
 let knowledgeEmbeddings = null;
 // Activar depuración de embeddings con la variable de entorno DEBUG_EMBEDDINGS=1
