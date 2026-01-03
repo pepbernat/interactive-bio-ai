@@ -14,7 +14,7 @@ if (!OPENAI_API_KEY) {
   throw new Error('OPENAI_API_KEY no encontrada. Configure la variable de entorno para usar embeddings de OpenAI.');
 }
 
-const EMB_CACHE_FILE = path.join(__dirname, '.embeddings_cache.json');
+const EMB_CACHE_FILE = path.join(__dirname, '../.embeddings_cache.json');
 let knowledgeChunks = [];
 let knowledgeEmbeddings = null;
 // Activar depuración de embeddings con la variable de entorno DEBUG_EMBEDDINGS=1
@@ -120,7 +120,7 @@ function chunkKnowledge(markdownText) {
   return chunks;
 }
 
-const configPath = path.join(__dirname, 'config.json');
+const configPath = path.join(__dirname, '../config.json');
 let config = {};
 try {
   if (fs.existsSync(configPath)) {
