@@ -7,3 +7,4 @@ public/
 data/chat_database.sqlite
 *.log
 server.log
+.DS_Store
