@@ -346,21 +346,6 @@ app.get('/api/suggestions', (req, res) => {
     }
 });
 
-// Endpoint para descargar todas las conversaciones guardadas
-app.get('/api/conversations', async (req, res) => {
-    try {
-        const allSessions = await db.getAllSessionsWithMessages();
-        const payload = {
-            exportedAt: new Date().toISOString(),
-            sessions: allSessions
-        };
-
-        return res.json(payload);
-    } catch (err) {
-        return res.status(500).json({ error: 'No se pudieron exportar las conversaciones.' });
-    }
-});
-
 // --- DASHBOARD API (PROTECTED) ---
 
 app.get('/api/dashboard/sessions', requireAuth, async (req, res) => {
