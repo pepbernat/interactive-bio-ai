@@ -24,13 +24,13 @@ No test runner or linter is configured.
 
 ## Architecture
 
-**Interactive Bio AI** is a personal conversational assistant for Pep Bernat, powered by OpenAI gpt-5.4-nano with RAG over a [knowledge.md](knowledge.md) knowledge base.
+**Interactive Bio AI** is a personal conversational assistant for Pep Bernat, powered by OpenAI with an adaptive context strategy over a [knowledge.md](knowledge.md) knowledge base.
 
 ### Stack
 - **Backend:** Node.js + Express (`server.js`)
 - **Frontend:** Vanilla HTML/CSS/JS (no framework) in [client/](client/)
 - **Database:** SQLite via `better-sqlite3` (sessions, messages, users)
-- **AI:** OpenAI API — `text-embedding-3-large` for semantic search, `gpt-5.4-nano` for chat
+- **AI:** OpenAI API — chat completions for conversation, `text-embedding-3-large` for semantic search (when active)
 - **Container:** Multi-stage Docker build → GitHub Container Registry (ghcr.io)
 
 ### Request Flow
@@ -39,8 +39,8 @@ No test runner or linter is configured.
 User message
   → POST /api/chat (sessionId + message)
   → Retrieve session history from SQLite
-  → Semantic search over knowledge.md chunks (cosine similarity on embeddings)
-  → Build system prompt from config.json template with injected context
+  → Build system prompt: full knowledge.md injected (< 100k chars) OR semantic RAG search (≥ 100k chars)
+  → Strategy is auto-selected at startup — see EMBEDDINGS_THRESHOLD_CHARS in server.js
   → OpenAI chat completion
   → Persist user + AI messages to SQLite
   → Return response
@@ -52,9 +52,9 @@ User message
 | --------------------- | -------------------------------------------------------------------------------- |
 | `server.js`           | Express app, all API routes, startup initialization                              |
 | `src/db.js`           | SQLite database: sessions, messages, users tables                                |
-| `src/embeddings.js`   | RAG engine: chunk knowledge.md, embed, cosine search                             |
+| `src/embeddings.js`   | Context module: `buildFullSystemPrompt` (default) and RAG via `buildContextualSystemPrompt` |
 | `config.json`         | System prompt template with `{{PROFILE_NAME}}` / `{{CONTEXT_INFO}}` placeholders |
-| `knowledge.md`        | Pep's professional profile — the RAG knowledge base                              |
+| `knowledge.md`        | Pep's professional profile — the knowledge base                                  |
 | `client/main.js`      | Chat UI, avatar animations, API calls                                            |
 | `client/ai-engine.js` | Local AI inference fallback (minimal)                                            |
 | `scripts/build.js`    | Asset pipeline: minify, hash, copy to `public/`                                  |
@@ -73,20 +73,23 @@ Always run `npm run build` after editing anything in `client/` before testing in
 
 Single-user admin model: first registered user becomes admin. JWT tokens are stored as HTTP-only cookies. Dashboard (`/dashboard`) requires authentication. The chat endpoint (`/api/chat`) is public and session-based (UUID sessionId from client).
 
-### Embeddings Cache
+### Context Strategy (auto-selected at startup)
 
-`src/.embeddings_cache.json` stores pre-computed embeddings for `knowledge.md` chunks. It is auto-regenerated if `knowledge.md` changes (content hash check). Set `DEBUG_EMBEDDINGS=true` in `.env` to log embedding activity.
+At startup, `server.js` reads `knowledge.md` and compares its size against `EMBEDDINGS_THRESHOLD_CHARS` (100k chars ≈ 25k tokens):
+
+- **Below threshold** (current default): the full `knowledge.md` is injected into every system prompt — no extra API calls, deterministic, simpler.
+- **Above threshold**: RAG is activated. `src/embeddings.js` chunks the document, generates embeddings via `text-embedding-3-large`, and retrieves the top-5 most relevant chunks per query. The cache is stored in `src/.embeddings_cache.json` and auto-regenerated when `knowledge.md` changes. Set `DEBUG_EMBEDDINGS=1` in `.env` to log chunk selection.
 
 ### Environment Variables
 
 Required in `.env`:
 - `OPENAI_API_KEY` — OpenAI API key
-- `OPENAI_MODEL` — model name (default: `gpt-5.4-nano`)
+- `OPENAI_MODEL` — chat model (default: `gpt-4o-mini`)
 - `MAX_TOKENS`, `TEMPERATURE` — generation config
 
 Optional:
 - `PORT` / `HOST` — server binding (default: `3000` / `0.0.0.0`)
-- `DEBUG_EMBEDDINGS` — verbose embedding logs
+- `DEBUG_EMBEDDINGS=1` — verbose RAG chunk selection logs (only relevant when embeddings are active)
 - Google Sheets credentials for conversation logging
 
 ### CI/CD

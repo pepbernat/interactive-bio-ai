@@ -9,7 +9,12 @@ const db = require('./src/db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
-const { generateKnowledgeEmbeddings, buildContextualSystemPrompt } = require('./src/embeddings');
+const { generateKnowledgeEmbeddings, buildContextualSystemPrompt, buildFullSystemPrompt } = require('./src/embeddings');
+
+// Umbral: ~100k chars ≈ 25k tokens, seguro para cualquier modelo moderno (128k context).
+// Por debajo → contexto completo (más fiable). Por encima → RAG con embeddings.
+const EMBEDDINGS_THRESHOLD_CHARS = 100_000;
+let USE_EMBEDDINGS = false; // se decide en initServer() tras leer el fichero
 
 const app = express();
 app.use(compression()); // Enable Gzip/Brotli compression
@@ -127,13 +132,14 @@ app.post('/api/chat', async (req, res) => {
         const history = await db.getMessages(sid);
         const userHasSharedContact = hasUserProvidedContact(history, { role: 'user', content: message });
 
-        // Usar búsqueda semántica para construir el system prompt
         let systemPrompt;
         try {
             if (!knowledgeText) throw new Error('Knowledge base vacía');
-            systemPrompt = await buildContextualSystemPrompt(knowledgeText, message);
+            systemPrompt = USE_EMBEDDINGS
+                ? await buildContextualSystemPrompt(knowledgeText, message)
+                : buildFullSystemPrompt(knowledgeText);
         } catch (err) {
-            console.warn('Error en búsqueda semántica (o knowledge vacío), usando prompt estándar:', err.message);
+            console.warn('Error construyendo system prompt, usando prompt estándar:', err.message);
             // Fallback al prompt estándar
             const profile = extractProfileBasic(knowledgeText);
             const profileName = profile.name;
@@ -403,11 +409,16 @@ async function initServer() {
         await db.initDB();
 
         if (knowledgeText && knowledgeText.length > 0) {
-            console.log('Inicializando búsqueda semántica...');
-            await generateKnowledgeEmbeddings(knowledgeText);
-            console.log('✓ Servidor listo con búsqueda semántica activada');
+            USE_EMBEDDINGS = knowledgeText.length > EMBEDDINGS_THRESHOLD_CHARS;
+            if (USE_EMBEDDINGS) {
+                console.log(`knowledge.md: ${knowledgeText.length} chars — supera el umbral (${EMBEDDINGS_THRESHOLD_CHARS}), activando embeddings semánticos...`);
+                await generateKnowledgeEmbeddings(knowledgeText);
+                console.log('✓ Servidor listo con búsqueda semántica activada');
+            } else {
+                console.log(`knowledge.md: ${knowledgeText.length} chars — bajo el umbral (${EMBEDDINGS_THRESHOLD_CHARS}), usando contexto completo`);
+            }
         } else {
-            console.warn('⚠ knowledge.md vacío o no encontrado - la búsqueda semántica no disponible');
+            console.warn('⚠ knowledge.md vacío o no encontrado');
         }
     } catch (err) {
         console.error('Error al inicializar servidor:', err.message);

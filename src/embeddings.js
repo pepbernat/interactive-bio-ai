@@ -294,9 +294,32 @@ async function buildContextualSystemPrompt(markdownText, userMessage) {
   return prompt;
 }
 
+/**
+ * Construye el system prompt inyectando TODO el knowledge.md como contexto.
+ * No usa embeddings ni chunking — el knowledge base es lo suficientemente pequeño
+ * para caber en la ventana de contexto de los modelos modernos (128k tokens).
+ */
+function buildFullSystemPrompt(markdownText) {
+  const profileInfo = extractProfileInfo(markdownText);
+  const profileName = profileInfo.name;
+
+  const contextInfo = `PERFIL COMPLETO:\n${markdownText}`;
+
+  let prompt = config.systemPromptTemplate || '';
+  if (Array.isArray(prompt)) {
+    prompt = prompt.join('\n');
+  }
+
+  prompt = prompt.replace('{{PROFILE_NAME}}', profileName);
+  prompt = prompt.replace('{{CONTEXT_INFO}}', contextInfo);
+
+  return prompt;
+}
+
 module.exports = {
   generateKnowledgeEmbeddings,
   searchRelevantChunks,
   buildContextualSystemPrompt,
+  buildFullSystemPrompt,
   chunkKnowledge // Export for testing
 };
