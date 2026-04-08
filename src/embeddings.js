@@ -247,14 +247,25 @@ async function searchRelevantChunks(query, topK = 5) {
 }
 
 async function buildContextualSystemPrompt(markdownText, userMessage) {
-  // Recargar config si se desea caliente, o usar la ya cargada
-  // Por simplicidad usamos la variable 'config' global de modulo cargada al inicio, 
-  // pero para desarrollo real igual interesa reload.
-
   const profileInfo = extractProfileInfo(markdownText);
   const profileName = profileInfo.name;
 
+  // Buscamos los 5 más relevantes semánticamente
   const relevantChunks = await searchRelevantChunks(userMessage, 5);
+
+  // El chunk de cabecera (índice 0) contiene "Puesto Actual" y datos clave del perfil.
+  // Se incluye siempre para que el modelo tenga la información de posición más reciente,
+  // independientemente de si la similitud semántica lo seleccionó o no.
+  const headerChunk = knowledgeChunks.length > 0 ? knowledgeChunks[0] : null;
+  const headerAlreadyIncluded = headerChunk && relevantChunks.some(c => c.type === headerChunk.type);
+  if (headerChunk && !headerAlreadyIncluded) {
+    // Sustituye el último chunk (el de menor similitud) por el header
+    relevantChunks.splice(relevantChunks.length > 0 ? relevantChunks.length - 1 : 0, 1, {
+      text: headerChunk.text,
+      type: headerChunk.type,
+      similarity: 1.0 // pinned
+    });
+  }
 
   if (DEBUG) {
     console.log('[embeddings-debug] Construyendo prompt. userMessage:', userMessage);

@@ -1,7 +1,7 @@
 # Perfil: Pep Bernat Llaneras
 
 - Headline: Ingeniero informático de negocio · Dirección y tecnología en travel tech
-- Puesto Actual: Tech & Business Development Head · Turoperación en Grupo Viajes El Corte Inglés / Smytravel (desde Marzo 2024)
+- Estado actual: Disponible para nuevos proyectos y colaboraciones desde Abril 2026
 
 ## Sobre Mí
 
