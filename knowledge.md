@@ -79,7 +79,7 @@ Sí, ofrezco servicios de consultoría estratégica y tecnológica por proyectos
 
 ### Grupo Viajes El Corte Inglés - Tech and Business Development Head · Turoperación
 
-*Marzo 2024 - Presente*
+*Marzo 2024 - Marzo 2026*
 
 - Dirección de la migración de soluciones de terceros a plataforma propia, reduciendo costes licenciados y ganando control sobre las soluciones.
 - Evolución de la arquitectura interna para soportar touroperación clásica, paquete dinámico y webs B2B/B2C, acelerando el time-to-market.
@@ -106,7 +106,7 @@ Sí, ofrezco servicios de consultoría estratégica y tecnológica por proyectos
 
 ### Smytravel - Brand Manager
 
-*Marzo 2024 - Presente*
+*Marzo 2024 - Marzo 2024*
 
 - Definición y ejecución de la nueva estrategia de posicionamiento de marca centrada en touroperación dinámica.
 - Labor comercial y ponencias sobre la marca frente a grandes multitudes y agentes de viaje.
