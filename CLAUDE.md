@@ -24,13 +24,13 @@ No test runner or linter is configured.
 
 ## Architecture
 
-**Interactive Bio AI** is a personal conversational assistant for Pep Bernat, powered by OpenAI GPT-4o-mini with RAG over a [knowledge.md](knowledge.md) knowledge base.
+**Interactive Bio AI** is a personal conversational assistant for Pep Bernat, powered by OpenAI gpt-5.4-nano with RAG over a [knowledge.md](knowledge.md) knowledge base.
 
 ### Stack
 - **Backend:** Node.js + Express (`server.js`)
 - **Frontend:** Vanilla HTML/CSS/JS (no framework) in [client/](client/)
 - **Database:** SQLite via `better-sqlite3` (sessions, messages, users)
-- **AI:** OpenAI API — `text-embedding-3-large` for semantic search, `gpt-4o-mini` for chat
+- **AI:** OpenAI API — `text-embedding-3-large` for semantic search, `gpt-5.4-nano` for chat
 - **Container:** Multi-stage Docker build → GitHub Container Registry (ghcr.io)
 
 ### Request Flow
@@ -48,16 +48,16 @@ User message
 
 ### Key Files
 
-| File | Purpose |
-|------|---------|
-| `server.js` | Express app, all API routes, startup initialization |
-| `src/db.js` | SQLite database: sessions, messages, users tables |
-| `src/embeddings.js` | RAG engine: chunk knowledge.md, embed, cosine search |
-| `config.json` | System prompt template with `{{PROFILE_NAME}}` / `{{CONTEXT_INFO}}` placeholders |
-| `knowledge.md` | Pep's professional profile — the RAG knowledge base |
-| `client/main.js` | Chat UI, avatar animations, API calls |
-| `client/ai-engine.js` | Local AI inference fallback (minimal) |
-| `scripts/build.js` | Asset pipeline: minify, hash, copy to `public/` |
+| File                  | Purpose                                                                          |
+| --------------------- | -------------------------------------------------------------------------------- |
+| `server.js`           | Express app, all API routes, startup initialization                              |
+| `src/db.js`           | SQLite database: sessions, messages, users tables                                |
+| `src/embeddings.js`   | RAG engine: chunk knowledge.md, embed, cosine search                             |
+| `config.json`         | System prompt template with `{{PROFILE_NAME}}` / `{{CONTEXT_INFO}}` placeholders |
+| `knowledge.md`        | Pep's professional profile — the RAG knowledge base                              |
+| `client/main.js`      | Chat UI, avatar animations, API calls                                            |
+| `client/ai-engine.js` | Local AI inference fallback (minimal)                                            |
+| `scripts/build.js`    | Asset pipeline: minify, hash, copy to `public/`                                  |
 
 ### Frontend Build
 
@@ -81,7 +81,7 @@ Single-user admin model: first registered user becomes admin. JWT tokens are sto
 
 Required in `.env`:
 - `OPENAI_API_KEY` — OpenAI API key
-- `OPENAI_MODEL` — model name (default: `gpt-4o-mini`)
+- `OPENAI_MODEL` — model name (default: `gpt-5.4-nano`)
 - `MAX_TOKENS`, `TEMPERATURE` — generation config
 
 Optional:
