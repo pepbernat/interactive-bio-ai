@@ -1,13 +1,19 @@
 # ==========================================
 # Stage 1: Builder
 # ==========================================
-FROM node:20-bookworm-slim AS builder
+FROM node:22-bookworm-slim AS builder
 
 WORKDIR /usr/src/app
 
+# Herramientas necesarias para compilar addons nativos como sqlite3
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends python3 make g++ \
+    && rm -rf /var/lib/apt/lists/*
+
 # Instalar dependencias completas para el build
 COPY package*.json ./
-RUN npm ci
+RUN npm ci \
+    && npm rebuild sqlite3 --build-from-source
 
 # Copiar código fuente
 COPY client ./client
@@ -21,12 +27,12 @@ COPY knowledge.md ./
 RUN npm run build
 
 # Limpiar dependencias de desarrollo
-RUN npm prune --production
+RUN npm prune --omit=dev
 
 # ==========================================
 # Stage 2: Runner
 # ==========================================
-FROM node:20-bookworm-slim
+FROM node:22-bookworm-slim
 
 WORKDIR /usr/src/app
 

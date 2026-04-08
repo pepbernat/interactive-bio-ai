@@ -22,6 +22,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 const PORT = process.env.PORT || 3000;
+const HOST = process.env.HOST || '0.0.0.0';
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const OPENAI_MODEL = process.env.OPENAI_MODEL || 'gpt-4o-mini';
 const JWT_SECRET = process.env.JWT_SECRET || 'dev_secret_key_change_in_prod';
@@ -413,7 +414,7 @@ async function initServer() {
         // Continuar de todas formas
     }
 
-    app.listen(PORT, () => console.log(`✓ Servidor iniciado en http://localhost:${PORT}`));
+    app.listen(PORT, HOST, () => console.log(`✓ Servidor iniciado en http://${HOST}:${PORT}`));
 }
 
 initServer();
