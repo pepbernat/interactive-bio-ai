@@ -159,7 +159,7 @@ INSTRUCCIONES:
         const payload = {
             model: OPENAI_MODEL,
             messages: messages,
-            max_tokens: parseInt(process.env.MAX_TOKENS || '2000', 10),
+            max_completion_tokens: parseInt(process.env.MAX_TOKENS || '2000', 10),
             temperature: parseFloat(process.env.TEMPERATURE || '0')
         };
 
