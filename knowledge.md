@@ -1,7 +1,7 @@
 # Perfil: Pep Bernat Llaneras
 
-- Headline: Ingeniero informático de negocio · Dirección y tecnología en travel tech
-- Estado actual: Disponible para nuevos proyectos y colaboraciones desde Abril 2026
+- Headline: Director de OTAs en Ávoris (Grupo Barceló) · Ingeniero informático de negocio en travel tech
+- Estado actual: Director de OTAs en Ávoris (Grupo Barceló) desde junio 2026.
 
 ## Sobre Mí
 
@@ -16,18 +16,18 @@ En tiempos de incertidumbre busco inspirar a otros para evolucionar. Me motiva l
 - Reflexión y resiliencia: subo montañas para reflexionar sobre problemas; la naturaleza me ayuda a encontrar respuestas.
 
 **Resumen Profesional:**
-Ingeniero informático con visión de negocio y +13 años liderando producto, tecnología, operaciones y P&L en travel tech, touroperación y agencias online. Especializado en paquetería dinámica, estrategia digital, arquitectura tecnológica, integración de equipos y crecimiento rentable.
+Actualmente Director de OTAs en Ávoris (Grupo Barceló). Ingeniero informático con visión de negocio y +13 años liderando producto, tecnología, operaciones y P&L en travel tech, touroperación y agencias online. Especializado en paquetería dinámica, estrategia digital, arquitectura tecnológica, integración de equipos y crecimiento rentable.
 
 **Identidad Profesional:**
 
 - Soy: Ingeniero orientado a negocio, Director con mentalidad de producto, Especialista en travel tech, Líder de equipos multidisciplinares, Amante del sector financiero.
 - No soy: Un perfil puramente técnico sin visión estratégica, Un director alejado del detalle operativo.
 
-## Servicios Ofrecidos
+## Áreas de Especialización
 
-Si buscas colaborar conmigo, aquí es donde puedo aportar valor inmediato:
+Estas son las áreas donde he aportado valor a lo largo de mi carrera y en las que tengo experiencia demostrada:
 
-### 1. Consultoría de Travel Tech
+### 1. Travel Tech
 
 - Diseño e implementación de **motores de búsqueda** de paquetería dinámica.
 - Desarrollo de **OTAs y APIs de viaje** robustas y escalables.
@@ -45,7 +45,7 @@ Si buscas colaborar conmigo, aquí es donde puedo aportar valor inmediato:
 - Charlas sobre **Liderazgo Agile**, Transformación Digital y Resiliencia.
 - Formación en **Innovación** y mejora de procesos operativos.
 
-### 4. Consultoría de Transformación Digital
+### 4. Transformación Digital
 
 - Modernización de sistemas legacy.
 - Migración de soluciones externas a **plataforma propia**.
@@ -72,10 +72,17 @@ Sí, he liderado áreas de IT completas y coordinado equipos multidisciplinares 
 **¿Qué opinas de la IA en el turismo?**
 Es el futuro inmediato. Desde la personalización de viajes hasta la automatización operativa (conciliación, atención cliente). Mi enfoque es usarla para eliminar tareas repetitivas y que el equipo se centre en aportar valor.
 
-**¿Podemos contratarte por proyectos?**
-Sí, ofrezco servicios de consultoría estratégica y tecnológica por proyectos específicos. Lo mejor es hablarlo directamente.
+**¿Estás disponible para colaboraciones?**
+Actualmente estoy centrado en mi rol como Director de OTAs en Ávoris (Grupo Barceló). Para temas de mentoría, ponencias o conversaciones sobre el sector, lo mejor es contactar a través de LinkedIn.
 
 ## Experiencia Profesional (Detalle)
+
+### Ávoris Corporación Empresarial (Grupo Barceló) - Director de OTAs
+
+*Junio 2026 - Actualidad*
+
+- Dirección del área de agencias de viaje online (OTAs) de Ávoris, la división de viajes del Grupo Barceló.
+- Responsabilidad sobre la estrategia, producto y crecimiento del negocio online del grupo.
 
 ### Grupo Viajes El Corte Inglés - Tech and Business Development Head · Turoperación
 
