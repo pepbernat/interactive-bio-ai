@@ -1,7 +1,7 @@
 # Perfil: Pep Bernat Llaneras
 
-- Headline: Director de OTAs en Ávoris (Grupo Barceló) · Ingeniero informático de negocio en travel tech
-- Estado actual: Director de OTAs en Ávoris (Grupo Barceló) desde junio 2026.
+- Headline: Ingeniero informático de negocio · Dirección y tecnología en travel tech
+- Estado actual: Director de Online en Ávoris (Grupo Barceló) desde junio 2026.
 
 ## Sobre Mí
 
@@ -16,7 +16,7 @@ En tiempos de incertidumbre busco inspirar a otros para evolucionar. Me motiva l
 - Reflexión y resiliencia: subo montañas para reflexionar sobre problemas; la naturaleza me ayuda a encontrar respuestas.
 
 **Resumen Profesional:**
-Actualmente Director de OTAs en Ávoris (Grupo Barceló). Ingeniero informático con visión de negocio y +13 años liderando producto, tecnología, operaciones y P&L en travel tech, touroperación y agencias online. Especializado en paquetería dinámica, estrategia digital, arquitectura tecnológica, integración de equipos y crecimiento rentable.
+Actualmente Director de Online en Ávoris (Grupo Barceló). Ingeniero informático con visión de negocio y +13 años liderando producto, tecnología, operaciones y P&L en travel tech, touroperación y agencias online. Especializado en paquetería dinámica, estrategia digital, arquitectura tecnológica, integración de equipos y crecimiento rentable.
 
 **Identidad Profesional:**
 
@@ -73,16 +73,16 @@ Sí, he liderado áreas de IT completas y coordinado equipos multidisciplinares 
 Es el futuro inmediato. Desde la personalización de viajes hasta la automatización operativa (conciliación, atención cliente). Mi enfoque es usarla para eliminar tareas repetitivas y que el equipo se centre en aportar valor.
 
 **¿Estás disponible para colaboraciones?**
-Actualmente estoy centrado en mi rol como Director de OTAs en Ávoris (Grupo Barceló). Para temas de mentoría, ponencias o conversaciones sobre el sector, lo mejor es contactar a través de LinkedIn.
+Actualmente estoy centrado en mi rol como Director de Online en Ávoris (Grupo Barceló). Para temas de mentoría, ponencias o conversaciones sobre el sector, lo mejor es contactar a través de LinkedIn.
 
 ## Experiencia Profesional (Detalle)
 
-### Ávoris Corporación Empresarial (Grupo Barceló) - Director de OTAs
+### Ávoris Corporación Empresarial (Grupo Barceló) - Director de Online
 
 *Junio 2026 - Actualidad*
 
-- Dirección del área de agencias de viaje online (OTAs) de Ávoris, la división de viajes del Grupo Barceló.
-- Responsabilidad sobre la estrategia, producto y crecimiento del negocio online del grupo.
+- Dirección de las agencias de viaje online (OTAs) de Ávoris Corporación Empresarial, la división de viajes del Grupo Barceló, entre ellas marcas como Muchoviaje y Tubillete.
+- Responsabilidad sobre la estrategia, el producto y el crecimiento del negocio online del grupo.
 
 ### Grupo Viajes El Corte Inglés - Tech and Business Development Head · Turoperación
 
